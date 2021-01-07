@@ -2,5 +2,7 @@
 product-review.iml
 .gradle/
 out/
-transcoding-grpc-to-http-json.iml
+*.iml
 build
+*.pb
+.DS_Store

@@ -6,7 +6,7 @@ import java.util.*;
 
 public class ReservationRepository {
 
-    private Map<String, Reservation> reservationById = new HashMap<>();
+    private final Map<String, Reservation> reservationById = new HashMap<>();
 
     public Optional<Reservation> findReservation(String id) {
         return Optional.ofNullable(reservationById.get(id));
@@ -17,14 +17,12 @@ public class ReservationRepository {
         Reservation reservationWithId = reservation.toBuilder()
                 .setId(id)
                 .build();
-
         reservationById.put(id, reservationWithId);
-
         return reservationWithId;
     }
 
     public List<Reservation> listReservations() {
-        return List.copyOf(reservationById.values());
+        return new ArrayList<>(reservationById.values());
     }
 
     public void deleteReservation(String id) {

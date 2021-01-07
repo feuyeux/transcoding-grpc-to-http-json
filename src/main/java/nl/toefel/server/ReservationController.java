@@ -7,13 +7,11 @@ import nl.toefel.reservations.v1.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 class ReservationController extends ReservationServiceGrpc.ReservationServiceImplBase {
 
-    private ReservationRepository reservationRepository;
+    private final ReservationRepository reservationRepository;
 
     public ReservationController(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
@@ -22,7 +20,9 @@ class ReservationController extends ReservationServiceGrpc.ReservationServiceImp
     @Override
     public void createReservation(CreateReservationRequest request, StreamObserver<Reservation> responseObserver) {
         System.out.println("createReservation() called");
-        Reservation createdReservation = reservationRepository.createReservation(request.getReservation());
+        Reservation reservation = request.getReservation();
+        System.out.println("reservation:" + reservation);
+        Reservation createdReservation = reservationRepository.createReservation(reservation);
         responseObserver.onNext(createdReservation);
         responseObserver.onCompleted();
     }
@@ -52,13 +52,15 @@ class ReservationController extends ReservationServiceGrpc.ReservationServiceImp
     @Override
     public void listReservations(ListReservationsRequest request, StreamObserver<Reservation> responseObserver) {
         System.out.println("listReservations() called with " + request);
-        if ("error".equals(request.getRoom())) {
+        String room = request.getRoom();
+        if ("error".equals(room)) {
             responseObserver.onError(Status.UNAUTHENTICATED.asRuntimeException());
-        } else if ("throw".equals(request.getRoom())) {
+        } else if ("throw".equals(room)) {
             throw Status.UNAUTHENTICATED.asRuntimeException();
         } else {
-            // nothing, empty response should yield []
-            responseObserver.onCompleted();
+            List<Reservation> reservations = reservationRepository.listReservations();
+            System.out.println("reservations:" + reservations);
+            reservations.forEach(responseObserver::onNext);
         }
     }
 

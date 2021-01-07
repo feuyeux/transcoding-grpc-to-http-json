@@ -24,7 +24,6 @@ public class ClientMain {
             System.out.println("response:" + nonExistingReservation);
         } catch (StatusRuntimeException e) {
             System.out.println(e.getStatus().getDescription() + " " + e.getMessage());
-            System.out.println(e);
         }
 
         String createdReservationId = createReservation(reservationClient, "JDriven Coltbaan 3", "2018-10-10T11:12:13", "meeting-room");
