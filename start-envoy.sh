@@ -15,7 +15,7 @@ else
     protoc --version
 fi
 
-echo "2 Generate pb"
+echo "2 Generate Proto Descriptors"
 # generate the reservation_service_definition.pb file that we can pass to envoy so that knows the grpc service
 # we want to expose
 protoc -I. -Ibuild/extracted-include-protos/main --include_imports \
