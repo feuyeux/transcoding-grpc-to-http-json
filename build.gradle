@@ -84,3 +84,9 @@ sourceSets {
         }
     }
 }
+
+task runServer(type: JavaExec) {
+    group = "Server Execution"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "nl.toefel.server.ServerMain"
+}
